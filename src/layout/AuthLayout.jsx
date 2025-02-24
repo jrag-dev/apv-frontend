@@ -5,8 +5,9 @@ import { Outlet } from 'react-router-dom'
 const AuthLayout = () => {
   return (
     <>
-      Desde AuthLayout
-      <Outlet />
+      <main className="w-[90%] container mx-auto grid grid-cols-1 gap:6 md:grid-cols-2 md:gap-14 place-items-center min-h-svh">
+        <Outlet />
+      </main>
     </>
   )
 }
