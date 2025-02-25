@@ -10,7 +10,7 @@ const Login = () => {
           <span className='text-gray-800'> Pacientes</span>
         </h1>
       </div>
-      <div className='w-full py-4 grid gap-8'>
+      <div className='w-full grid gap-8 shadow-lg px-5 py-10 rounded-xl bg-white'>
         <form className='flex flex-col gap-8'>
           <div className='flex flex-col gap-3'>
             <label className='uppercase font-bold text-gray-500 block' htmlFor="email">Email</label>
@@ -35,7 +35,7 @@ const Login = () => {
           <input
             type="submit"
             value="Iniciar Sesión"
-            className='bg-indigo-500 text-gray-50 rounded-xl py-3 px-10 uppercase font-bold hover:cursor-pointer hover:00 transition-all md:w-1/2 xl:w-1/3'
+            className='bg-indigo-500 text-gray-50 rounded-xl py-3 px-10 uppercase font-bold hover:cursor-pointer hover:bg-indigo-600 transition-all xl:size-max'
           />
         </form>
         <nav className='w-full flex flex-col items-center gap-4 md:flex-row md:justify-between'>
