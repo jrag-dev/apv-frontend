@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from "axios"
 import Alert from '../components/Alert.jsx';
+import instanceAxios from '../config/axios.js';
+import { validateEmail } from '../helpers/validateEmail.js';
 
 
 const Register = () => {
@@ -45,13 +46,14 @@ const Register = () => {
         message: "El password debe contener minimo 6 caracteres",
         error: true
       })
+      return;
     }
 
     setAlert({})
 
     // create an user in our api
     try {
-      const response = await axios.post('http://localhost:5001/api/v1/veterinarians/register', { name, email, password });
+      const response = await instanceAxios.post('/veterinarians/register', { name, email, password });
       console.log(response.data.message);
       setAlert({
         message: response.data.message,
@@ -67,10 +69,6 @@ const Register = () => {
         error: true
       })
     }
-  }
-
-  const validateEmail = (email) => {
-    return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email);
   }
 
   return (
