@@ -6,12 +6,15 @@ import instanceAxios from "../../config/axios.js";
 
 const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({})
+  const [loading, setLoading] = useState(true);
 
 
   const authenticateUser = async () => {
     const apv_token = localStorage.getItem('apv_token');
 
-    if (!apv_token) return null;
+    if (!apv_token) {
+      setLoading(false);
+    }
 
     const config = {
       headers: {
@@ -29,15 +32,23 @@ const AuthProvider = ({ children }) => {
       console.log(err.response.data.message)
     }
 
-    console.log(apv_token);
+    setLoading(false);
   }
 
   useEffect(() => {
     authenticateUser();
   }, [])
 
+  const logout = () => {
+    localStorage.removeItem('apv_token');
+    setAuth({});
+  }
+
   const data = {
-    auth
+    auth,
+    loading,
+    setAuth,
+    logout
   }
 
   return (

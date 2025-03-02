@@ -12,7 +12,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const { auth } = useAuthContext();
+  const { setAuth } = useAuthContext();
 
 
   const handleSubmitForm = async (e) => {
@@ -48,13 +48,14 @@ const Login = () => {
     try {
       const url = '/veterinarians/login';
       const { data } = await instanceAxios.post(url, { email, password });
-      localStorage.setItem('apv_token', data.token);
+      localStorage.setItem('apv_token', data.veterinarian.token);
       setAlert(
         {
-          message: data.message,
+          message: data.veterinarian.message,
           error: false
         }
       )
+      setAuth(data.veterinarian);
       navigate("/admin");
     } catch (err) {
       setAlert(
