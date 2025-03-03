@@ -6,7 +6,7 @@ const Header = () => {
   const { logout } = useAuthContext();
 
   return (
-    <header className='py-10 bg-indigo-600'>
+    <header className='py-6 bg-indigo-600'>
       <div className="container mx-auto flex flex-col gap-6 lg:flex-row lg:gap-0 items-center justify-between">
         <h1 className='font-bold text-2xl text-indigo-200 text-center'>
           Administrador de Pacientes de {''}
