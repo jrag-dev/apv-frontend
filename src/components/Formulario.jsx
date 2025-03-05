@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import Alert from './Alert.jsx'
+import { validateEmail } from '../helpers/validateEmail.js'
+import { usePatientContext } from '../hooks/usePatient.jsx'
 
 const Formulario = () => {
   const [name, setName] = useState("")
@@ -6,16 +9,41 @@ const Formulario = () => {
   const [email, setEmail] = useState("")
   const [date, setDate] = useState("")
   const [symptoms, setSymptoms] = useState("")
+  const [alert, setAlert] = useState({})
+
+  const { savePatient } = usePatientContext();
 
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
 
+    if ([name, owner, email, date, symptoms].includes('')) {
+      setAlert({
+        message: 'Todos los campos son requeridos',
+        error: true
+      })
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setAlert({
+        message: "Email no válido",
+        error: true
+      })
+      return;
+    }
+
     const patient = {
       name, owner, email, date, symptoms
     }
 
-    console.log(patient)
+    savePatient(patient)
+
+    setName("");
+    setOwner("");
+    setEmail("")
+    setDate("");
+    setSymptoms("");
   }
 
   return (
@@ -28,6 +56,13 @@ const Formulario = () => {
           Añade tus pacientes y {''}
           <span className='text-indigo-600 font-black'>Administralos</span>
         </h2>
+        {
+          alert.message && (
+            <Alert
+              alert={alert}
+            />
+          )
+        }
         <div className='grid grid-cols-1 gap-2'>
           <label className='uppercase font-bold text-gray-600 block w-full' htmlFor="name">Nombre:</label>
           <input
