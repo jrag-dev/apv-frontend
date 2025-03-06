@@ -6,10 +6,38 @@ import instanceAxios from "../../config/axios.js";
 
 const PatientProvider = ({ children }) => {
   const [patients, setPatients] = useState([]);
+  const [patientToEdit, setPatientToEdit] = useState({});
+  const apv_token = localStorage.getItem('apv_token');
 
 
 
-  const findPatients = async () => {
+
+  useEffect(() => {
+    const findPatients = async () => {
+      try {
+        const apv_token = localStorage.getItem('apv_token');
+        if (!apv_token) return;
+
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apv_token}`
+          }
+        }
+        const { data } = await instanceAxios.get('/patients', config);
+        setPatients(
+          [
+            ...data.patients
+          ]
+        )
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    findPatients()
+  }, [])
+
+  const savePatient = async (patient, setAlert) => {
     const apv_token = localStorage.getItem('apv_token');
     const config = {
       headers: {
@@ -17,26 +45,38 @@ const PatientProvider = ({ children }) => {
         Authorization: `Bearer ${apv_token}`
       }
     }
-    try {
-      const { data } = await instanceAxios.get('/patients', config);
-      console.log("patients: ", data)
-      setPatients(
-        [
-          ...data.patients
-        ]
-      )
-    } catch (err) {
-      console.log(err)
+
+    if (patient.id) {
+      try {
+        const { data } = await instanceAxios.put(`/patients/${patient.id}`, patient, config);
+        const newListPatient = patients.map(patientState => patientState._id === data.patient._id ? data.patient : patientState);
+        setPatients(newListPatient);
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      try {
+        const { data } = await instanceAxios.post('/patients', patient, config);
+        const { createdAt, updatedAt, ...patientSaved } = data.patient;
+        setPatients(
+          [
+            patientSaved,
+            ...patients
+          ]
+        )
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 
-  useEffect(() => {
-    findPatients()
-  }, [])
+  const savePatientToEdit = (patient) => {
+    setPatientToEdit(patient);
+  }
 
-
-  const savePatient = async (patient) => {
-    try {
+  const deletePatient = async (_id) => {
+    const confirmDelete = confirm('¿Confirmas que deseas eliminar?');
+    if (confirmDelete) {
       const apv_token = localStorage.getItem('apv_token');
       const config = {
         headers: {
@@ -44,24 +84,22 @@ const PatientProvider = ({ children }) => {
           Authorization: `Bearer ${apv_token}`
         }
       }
-      const { data } = await instanceAxios.post('/patients', patient, config);
-      const { createdAt, updatedAt, ...patientSaved } = data.patient;
-
-      setPatients(
-        [
-          patientSaved,
-          ...patients
-        ]
-      )
-    } catch (err) {
-      console.log(err);
+      try {
+        const { data } = await instanceAxios.delete(`/patients/${_id}`, config);
+        const newListPatient = patients.filter(patientState => patientState._id !== _id);
+        setPatients(newListPatient);
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 
-
   const data = {
     patients,
-    savePatient
+    patientToEdit,
+    savePatient,
+    savePatientToEdit,
+    deletePatient
   }
 
   return (

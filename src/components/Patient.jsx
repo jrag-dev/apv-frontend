@@ -1,7 +1,10 @@
 import React from 'react'
+import { usePatientContext } from '../hooks/usePatient.jsx';
 
 const Patient = ({ patient }) => {
   const { name, owner, email, date, symptoms } = patient;
+
+  const { savePatientToEdit, deletePatient } = usePatientContext();
 
   const formaterDate = (date) => {
     const newDate = new Date(date);
@@ -27,8 +30,16 @@ const Patient = ({ patient }) => {
       </p>
 
       <div className='flex items-center justify-between my-2'>
-        <button className='bg-indigo-500 text-gray-50 py-2 px-6 border-none rounded-lg hover:bg-indigo-600 cursor-pointer hover:ring-1 hover:ring-indigo-600 transition-all duration-300 ease-in-out' type='button'>Editar</button>
-        <button className='bg-red-500 text-gray-50 py-2 px-6 border-none rounded-lg hover:bg-red-600 cursor-pointer hover:ring-1 hover:ring-red-600 transition-all duration-300 ease-in-out' type='button'>Eliminar</button>
+        <button
+          className='bg-indigo-500 text-gray-50 py-2 px-6 border-none rounded-lg hover:bg-indigo-600 cursor-pointer hover:ring-1 hover:ring-indigo-600 transition-all duration-300 ease-in-out'
+          type='button'
+          onClick={() => savePatientToEdit(patient)}
+        >Editar</button>
+        <button
+          className='bg-red-500 text-gray-50 py-2 px-6 border-none rounded-lg hover:bg-red-600 cursor-pointer hover:ring-1 hover:ring-red-600 transition-all duration-300 ease-in-out'
+          type='button'
+          onClick={() => deletePatient(patient._id)}
+        >Eliminar</button>
       </div>
     </div>
   )

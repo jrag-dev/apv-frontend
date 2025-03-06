@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Alert from './Alert.jsx'
 import { validateEmail } from '../helpers/validateEmail.js'
 import { usePatientContext } from '../hooks/usePatient.jsx'
@@ -9,10 +9,21 @@ const Formulario = () => {
   const [email, setEmail] = useState("")
   const [date, setDate] = useState("")
   const [symptoms, setSymptoms] = useState("")
+  const [id, setId] = useState(null)
   const [alert, setAlert] = useState({})
 
-  const { savePatient } = usePatientContext();
+  const { patientToEdit, savePatient } = usePatientContext();
 
+  useEffect(() => {
+    if (patientToEdit._id) {
+      setName(patientToEdit.name);
+      setOwner(patientToEdit.owner);
+      setEmail(patientToEdit.email)
+      setDate(patientToEdit.date);
+      setSymptoms(patientToEdit.symptoms);
+      setId(patientToEdit._id);
+    }
+  }, [patientToEdit])
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
@@ -34,16 +45,22 @@ const Formulario = () => {
     }
 
     const patient = {
-      name, owner, email, date, symptoms
+      name, owner, email, date, symptoms, id
     }
 
-    savePatient(patient)
+    savePatient(patient);
 
     setName("");
     setOwner("");
-    setEmail("")
+    setEmail("");
     setDate("");
     setSymptoms("");
+    setId(null);
+
+    setAlert({
+      message: 'Paciente Guardado Correctamente',
+      error: false
+    })
   }
 
   return (
@@ -125,7 +142,7 @@ const Formulario = () => {
           ></textarea>
         </div>
 
-        <input className='uppercase text-sm font-bold border-2 border-indigo-700 bg-indigo-600 px-6 py-3 rounded-lg text-gray-50 cursor-pointer hover:bg-indigo-700 hover:scale-x-105 transition-all duration-300 ease-in-out xl:w-2/5' type="submit" value="Nuevo Paciente" />
+        <input className='uppercase text-sm font-bold border-2 border-indigo-700 bg-indigo-600 px-6 py-3 rounded-lg text-gray-50 cursor-pointer hover:bg-indigo-700 hover:scale-x-105 transition-all duration-300 ease-in-out xl:w-2/5' type="submit" value={patientToEdit._id ? 'Editar Paciente' : 'Agregar Paciente'} />
       </form>
     </>
   )
