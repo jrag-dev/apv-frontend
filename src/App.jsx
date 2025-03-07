@@ -10,6 +10,7 @@ import AuthProvider from "./contexts/auth/AuthProvider.jsx";
 import ProtectedRoutes from "./layout/ProtectedRoutes.jsx";
 import AdminPatients from "./pages/AdminPatients.jsx";
 import PatientProvider from "./contexts/patients/PatientProvider.jsx";
+import { Profile } from "./pages/Profile.jsx";
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
 
             <Route path="/admin" element={<ProtectedRoutes />}>
               <Route index element={<AdminPatients />} />
+              <Route path="profile" element={<Profile />} />
             </Route>
           </Routes>
         </PatientProvider>
