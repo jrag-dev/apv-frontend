@@ -11,6 +11,7 @@ import ProtectedRoutes from "./layout/ProtectedRoutes.jsx";
 import AdminPatients from "./pages/AdminPatients.jsx";
 import PatientProvider from "./contexts/patients/PatientProvider.jsx";
 import { Profile } from "./pages/Profile.jsx";
+import ChangePassword from "./pages/ChangePassword.jsx";
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="/admin" element={<ProtectedRoutes />}>
               <Route index element={<AdminPatients />} />
               <Route path="profile" element={<Profile />} />
+              <Route path="change-password" element={<ChangePassword />} />
             </Route>
           </Routes>
         </PatientProvider>

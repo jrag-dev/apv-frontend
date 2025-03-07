@@ -44,11 +44,37 @@ const AuthProvider = ({ children }) => {
     setAuth({});
   }
 
+  const changeProfile = async (profile) => {
+    const apv_token = localStorage.getItem('apv_token');
+    if (!apv_token) return;
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apv_token}`
+      }
+    }
+
+    try {
+      const { data } = await instanceAxios.put(`/veterinarians/profile/${profile._id}`, profile, config);
+      return {
+        message: data.message,
+        error: false
+      }
+    } catch (err) {
+      return {
+        message: err.response.data.message,
+        error: true
+      }
+    }
+  }
+
   const data = {
     auth,
     loading,
     setAuth,
-    logout
+    logout,
+    changeProfile
   }
 
   return (

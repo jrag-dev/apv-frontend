@@ -10,8 +10,6 @@ const PatientProvider = ({ children }) => {
   const apv_token = localStorage.getItem('apv_token');
 
 
-
-
   useEffect(() => {
     const findPatients = async () => {
       try {
