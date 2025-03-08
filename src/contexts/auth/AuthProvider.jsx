@@ -69,12 +69,37 @@ const AuthProvider = ({ children }) => {
     }
   }
 
+  const saveNewPassword = async (passwordActual, passwordNuevo) => {
+    try {
+      const apv_token = localStorage.getItem('apv_token');
+      if (!apv_token) return;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apv_token}`
+        }
+      }
+      const { data } = await instanceAxios.put('/veterinarians/update-password', { passwordActual, passwordNuevo }, config);
+      return {
+        message: data.message,
+        error: false
+      }
+    } catch (err) {
+      return {
+        message: err.response.data.message,
+        error: true
+      }
+    }
+  }
+
   const data = {
     auth,
     loading,
     setAuth,
     logout,
-    changeProfile
+    changeProfile,
+    saveNewPassword
   }
 
   return (

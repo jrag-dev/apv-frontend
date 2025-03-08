@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import PatientContext from "./PatientContext.jsx"
 import instanceAxios from "../../config/axios.js";
+import { useAuthContext } from "../../hooks/useAuth.jsx";
 
 
 
@@ -8,6 +9,7 @@ const PatientProvider = ({ children }) => {
   const [patients, setPatients] = useState([]);
   const [patientToEdit, setPatientToEdit] = useState({});
   const apv_token = localStorage.getItem('apv_token');
+  const { auth } = useAuthContext();
 
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const PatientProvider = ({ children }) => {
       }
     }
     findPatients()
-  }, [])
+  }, [auth])
 
   const savePatient = async (patient, setAlert) => {
     const apv_token = localStorage.getItem('apv_token');
